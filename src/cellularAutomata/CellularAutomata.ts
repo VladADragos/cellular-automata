@@ -4,6 +4,7 @@ import Colors from "./Colors";
 import CellStates from "./CellStates";
 import Rules from "./Rules";
 import eRules from "./eRules";
+import RuleSets from "./RuleSets";
 class CellularAutomata implements IObservable {
   grid: Array2D<number>;
   lineBuffer: number[];
@@ -12,7 +13,6 @@ class CellularAutomata implements IObservable {
   width: number;
   currentLine: number = 1;
   observers: IObserver[] = [];
-  rule: eRules;
 
   constructor(width: number, height: number, cellSize: number,rule:eRules = 30) {
 
@@ -20,7 +20,7 @@ class CellularAutomata implements IObservable {
     this.height = height;
     this.lineBuffer = new Array(width).fill(0);
     this.newLineBuffer = new Array(width).fill(0);
-    this.rule = rule
+    Rules.rule = rule;
     this.grid = new Array2D(this.height, this.width, () => 0);
   }
 
@@ -112,7 +112,7 @@ class CellularAutomata implements IObservable {
       let current = this.lineBuffer[x]
       let left =this.lineBuffer[(x+this.width-1)%this.width];
       let right = this.lineBuffer[(x+1)%this.width];
-      let value =Rules.rule1(left,current,right,this.rule); 
+      let value =Rules.getNewCellState(left,current,right); 
       this.newLineBuffer[x] = value;
       this.notifySet(this.currentLine,x,value);
     }
@@ -120,7 +120,6 @@ class CellularAutomata implements IObservable {
 
     this.currentLine = (this.currentLine +1) % (this.height);;
 
-    // this.currentLine = 
   }
 
   down(x: number, y: number): index {

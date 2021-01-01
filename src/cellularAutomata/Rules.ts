@@ -2,67 +2,45 @@ import eRules from "./eRules";
 import RuleSets from "./RuleSets";
 
 
-
-
+function compareStates(a: [number,number,number],b:[number,number,number]){
+    return a[0] == b[0] &&  a[1] == b[1] &&  a[2] == b[2]; 
+}
 class Rules{
 
-    // rule number -> number -> number -> number
-    // rule current right left -> next state
-
-    static rules = [
-
-    ]
-    // no op
-    static rule0(current: number,right:number,left:number):number{
-        return 0;
-    }
-
+    static rule: eRules = eRules.rule_30;
     static matchCellState(input:[number,number,number],ruleSet: number[]): number{
-        let inputAsStr = input.toString();
-        switch (inputAsStr) {
-            case [1,1,1].toString():
-                return ruleSet[0];
-            case [1,1,0].toString():
-                return ruleSet[1];
-            case [1,0,1].toString():
-                return ruleSet[2];
-            case [1,0,0].toString():
-                return ruleSet[3];
-            case [0,1,1].toString():
-                return ruleSet[4];
-            case [0,1,0].toString():
-                return ruleSet[5];
-            case [0,0,1].toString():
-                return ruleSet[6];
-            case [0,0,0].toString():
-                return ruleSet[7];
-
-            default:
-                console.assert(false);
-                console.error("ERROR WITH RULE SET ");
-                return 100;
+        if(compareStates(input,[1,1,1])){
+            return ruleSet[0];
         }
-
+        else if(compareStates(input,[1,1,0])){
+            return ruleSet[1];
+        }
+        else if(compareStates(input,[1,0,1])){
+            return ruleSet[2];  
+        }
+        else if(compareStates(input,[1,0,0])){
+            return ruleSet[3];
+        }
+        else if(compareStates(input,[0,1,1])){
+            return ruleSet[4];
+        }
+        else if(compareStates(input,[0,1,0])){
+            return ruleSet[5];
+        }
+        else if(compareStates(input,[0,0,1])){
+            return ruleSet[6];
+        }
+        else if(compareStates(input,[0,0,0])){
+            return ruleSet[7];
+        }
+        console.error("invalid cell states");
+        return ruleSet[0];
     } 
-    // static _rules = {
-    //     "30": [0,0,0,1,1,1,1,0],
-    //     "126": [0,1,1,1,1,1,1,0],
-    //     "54": [0,0,1,1,0,1,1,0] 
-    // }
-    static rule1(left:number,current: number,right:number,rule: eRules):number{
-        let r = rule;
-        let ruleSet: number[] = RuleSets[rule];
+    static getNewCellState(left:number,current: number,right:number):number{
+        let ruleSet: number[] = RuleSets[Rules.rule];
         let cellState:[number,number,number] = [left,current,right];
         return Rules.matchCellState(cellState,ruleSet);
-        // return 1;
-    }
-    static rule2(current: number,right:number,left:number):number{
-        if (current  && (right || left)) return 1;
-        if (!current  && (right && left)) return 1;
-        return 0;
-    }
-
-    
+    }   
 }
 
 
